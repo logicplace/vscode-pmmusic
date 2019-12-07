@@ -1,0 +1,86 @@
+{
+	"name": "pmmusic",
+	"displayName": "PMMusic",
+	"description": "Write and play music projects for the Pokemon mini.",
+	"license": "MIT",
+	"publisher": "LogicPlace",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.40.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/logicplace/vscode-pmmusic.git"
+	},
+	"bugs": {
+		"url": "https://github.com/logicplace/vscode-pmmusic/issues"
+	},
+	"categories": [
+		"Languages",
+		"Other"
+	],
+	"keywords": [
+		"pokemon mini",
+		"highlighter",
+		"syntax"
+	],
+	"galleryBanner": {
+		"color": "#6600ff",
+		"theme": "dark"
+	},
+	"activationEvents": [
+		"onLanguage:pmmusic"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"languages": [
+			{
+				"id": "pmmusic",
+				"aliases": [
+					"PM Music",
+					"pmmusic"
+				],
+				"extensions": [
+					".pmmusic"
+				]
+			}
+		],
+		"grammars": [
+			{
+				"language": "pmmusic",
+				"scopeName": "source.pmmusic",
+				"path": "./grammars/pmmusic.tmLanguage"
+			}
+		],
+        "configuration": {
+            "properties": {
+                "pmmusic.enableCodeLens": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "pmmusic.musicconvPath": {
+                    "type": "string",
+                    "default": "pokemini_musicconv"
+                }
+            }
+        }
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^5.2.7",
+		"@types/node": "^12.11.7",
+		"@types/vscode": "^1.40.0",
+		"glob": "^7.1.5",
+		"mocha": "^6.2.2",
+		"typescript": "^3.6.4",
+		"tslint": "^5.20.0",
+		"vscode-test": "^1.2.2"
+	}
+}

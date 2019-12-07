@@ -1,0 +1,47 @@
+TITLE Pokemon-Mini Intro
+COMPOSER Nintendo
+PROGRAMMER JustBurn
+DESCRIPTION Intro played when starting any commercial game
+
+MTIME $00FF
+
+BGM bgm_pmintro { bgm_pmintro_p0 }
+
+PAT bgm_pmintro_pat {    // This version works with any MML player
+ o6 l6
+ v15e v8e v15a v8a r3
+ > v15d v8d v15c+ v8c+
+ < v15a v8a > v15e v8e r1
+ v15 l8 d a > e b e b r4 ;
+}
+
+PAT bgm_pmintro_p0 {     /* Same as bgm_pmintro_pat */
+ o6 l3
+ s32 e a r >d c+ <a >e r1
+ s64 l8 d a >e b e b r4
+}
+
+PAT_T bgm_pmintro_p0t {     /* Same as bgm_pmintro_pat */
+ROW w4, v15, %$80, E-5
+ROW w4, v8
+ROW w4, v15, %$80, A-5
+ROW w4, v8
+ROW w9, v0
+ROW w4, v15, %$80, D-6
+ROW w4, v8
+ROW w4, v15, %$80, C#6
+ROW w4, v8
+ROW w4, v15, %$80, A-5
+ROW w4, v8
+ROW w4, v15, %$80, E-6
+ROW w4, v8
+ROW w24, v0
+ROW w3, v15, %$80, D-6
+ROW w3, v15, %$80, A-6
+ROW w3, v15, %$80, E-7
+ROW w3, v15, %$80, B-7
+ROW w3, v15, %$80, E-7
+ROW w3, v15, %$80, B-7
+ROW w6, v0
+; // END doesn't actually compile I guess ??
+}
