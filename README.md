@@ -22,6 +22,10 @@ This extension contributes the following settings:
 
 ## Release Notes
 
+### 0.0.2
+
+Fix highlighting bug on notes in MML
+
 ### 0.0.1
 
 Initial development release of pmmusic

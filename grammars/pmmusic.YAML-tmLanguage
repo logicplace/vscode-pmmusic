@@ -172,7 +172,7 @@ repository:
   mml-data:
     patterns:
       - include: '#comment'
-      - match: '([a-g][-+#]?|r)([1-9]|\.\.?)?'
+      - match: '([a-g][-+#]?|r)(\d*(?:\.\.?)?)?'
         captures:
           '1': {name: variable.language.pmmusic}
           '2': {name: constant.numeric.integer.decimal.length.pmmusic}

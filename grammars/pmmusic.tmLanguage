@@ -719,7 +719,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>([a-g][-+#]?|r)([1-9]|\.\.?)?</string>
+					<string>([a-g][-+#]?|r)(\d*(?:\.\.?)?)?</string>
 					<key>captures</key>
 					<dict>
 						<key>1</key>

@@ -4,7 +4,7 @@
 	"description": "Write and play music projects for the Pokemon mini.",
 	"license": "MIT",
 	"publisher": "LogicPlace",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.40.0"
 	},
