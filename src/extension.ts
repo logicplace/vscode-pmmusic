@@ -26,6 +26,7 @@ export function activate(context: ExtensionContext) {
             let doc = window.activeTextEditor.document;
             let file = doc.fileName;
             doc.save();
+            codelensProvider.play(name);
             terminals[name] = window.createTerminal(`Playing ${name}`, exe, ["-i", file, "-play", name]);
             // TODO: watch for "Error:" and show terminal (or toast?) if any appear
             // TODO: use event emitters to toggle play/stop button ...
@@ -36,6 +37,7 @@ export function activate(context: ExtensionContext) {
     window.onDidCloseTerminal((terminal) => {
         let name = terminal.name.replace("Playing ", "");
         if (name in terminals) {
+            codelensProvider.stop(name);
             delete terminals[name];
         }
 	});

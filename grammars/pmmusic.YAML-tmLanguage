@@ -143,14 +143,17 @@ repository:
         beginCaptures:
           '1': {name: keyword.control.directive.track.row.pmmusic}
         patterns:
-          - {include: '#comment'}
-          - {match: '([A-G][-+#]?)([1-9])', captures: {'1': {name: variable.language.pmmusic}, '2': {name: constant.numeric.integer.decimal.octave.pmmusic}}, name: meta.mark.sound.note.pmmusic}
-          - {match: '([%vwqs]|x[tpsr])(?:(\d+)|((?:0x|\$)[\da-fA-F]+))', captures: {'1': {name: entity.name.function.built-in.pmmusic}, '2': {name: constant.numeric.integer.decimal.pmmusic}, '3': {name: constant.numeric.integer.hexadecimal.pmmusic}}, name: meta.mark.sound.modifier.pmmusic}
-          - {match: (xd), captures: {'1': {name: entity.name.function.built-in.pmmusic}}, name: meta.mark.sound.modifier.pmmusic}
-          - {match: '(!|xa)(?:(\d+)|((?:0x|\$)[\da-fA-F]+)):(?:(\d+)|((?:0x|\$)[\da-fA-F]+))', captures: {'1': {name: entity.name.function.built-in.pmmusic}, '2': {name: constant.numeric.integer.decimal.pmmusic}, '3': {name: constant.numeric.integer.hexadecimal.pmmusic}, '4': {name: constant.numeric.integer.decimal.pmmusic}, '5': {name: constant.numeric.integer.hexadecimal.pmmusic}}, name: meta.mark.sound.modifier.pmmusic}
+          - include: '#comment'
+          - match: '([A-G][- _+#]?)([1-9]?)|([-_])'
+            captures:
+              '1': {name: variable.language.pmmusic}
+              '2': {name: constant.numeric.integer.decimal.octave.pmmusic}
+              '3': {name: variable.language.pmmusic}
+            name: meta.mark.sound.note.pmmusic
+          - include: '#common-commands'
         end: $
         name: meta.directive.row.pmmusic
-      - match: (;)
+      - match: (END|;)
         captures:
           '1': {name: keyword.control.directive.track.end.pmmusic}
         name: meta.directive.end.pmmusic
@@ -177,7 +180,30 @@ repository:
           '1': {name: variable.language.pmmusic}
           '2': {name: constant.numeric.integer.decimal.length.pmmusic}
         name: meta.mark.sound.note.pmmusic
-      - match: '([%\\/vwloqs]|x[tpsr])(?:(\d+)|((?:0x|\$)[\da-fA-F]+))'
+      - match: '([/lo])(?:(\d+)|((?:0x|\$)[\da-fA-F]+))'
+        captures:
+          '1': {name: entity.name.function.built-in.pmmusic}
+          '2': {name: constant.numeric.integer.decimal.pmmusic}
+          '3': {name: constant.numeric.integer.hexadecimal.pmmusic}
+        name: meta.mark.sound.modifier.pmmusic
+      - include: '#common-commands'
+      - match: ;
+        name: keyword.control.end.pmmusic
+      - match: '\['
+        name: keyword.control.loop.begin.pmmusic
+      - match: '(\])(?:(\d+)|((?:0x|\$)[\da-fA-F]+))?'
+        captures:
+          '1': {name: keyword.control.loop.end.pmmusic}
+          '2': {name: constant.numeric.integer.decimal.pmmusic}
+          '3': {name: constant.numeric.integer.hexadecimal.pmmusic}
+        name: meta.endloop.pmmusic
+      - match: '[A-Z]'
+        name: variable.other.pmmusic
+      - match: '<|>'
+        name: keyword.control.octave.step.pmmusic
+  common-commands:
+    patterns:
+      - match: '([%\\vwqs]|x[tpsr])(?:(\d+)|((?:0x|\$)[\da-fA-F]+))'
         captures:
           '1': {name: entity.name.function.built-in.pmmusic}
           '2': {name: constant.numeric.integer.decimal.pmmusic}
@@ -195,17 +221,11 @@ repository:
           '4': {name: constant.numeric.integer.decimal.pmmusic}
           '5': {name: constant.numeric.integer.hexadecimal.pmmusic}
         name: meta.mark.sound.modifier.pmmusic
-      - match: ;
-        name: keyword.control.end.pmmusic
-      - match: '\['
-        name: keyword.control.loop.begin.pmmusic
-      - match: '(\])(?:(\d+)|((?:0x|\$)[\da-fA-F]+))?'
+      - match: '(x[a-z])(?:(\d+)|((?:0x|\$)[\da-fA-F]+):)*(?:(\d+)|((?:0x|\$)[\da-fA-F]+))'
         captures:
-          '1': {name: keyword.control.loop.end.pmmusic}
+          '1': {name: entity.name.function.built-in.pmmusic}
           '2': {name: constant.numeric.integer.decimal.pmmusic}
           '3': {name: constant.numeric.integer.hexadecimal.pmmusic}
-        name: meta.endloop.pmmusic
-      - match: '[A-Z]'
-        name: variable.other.pmmusic
-      - match: '<|>'
-        name: keyword.control.octave.step.pmmusic
+          '4': {name: constant.numeric.integer.decimal.pmmusic}
+          '5': {name: constant.numeric.integer.hexadecimal.pmmusic}
+        name: meta.mark.sound.modifier.pmmusic

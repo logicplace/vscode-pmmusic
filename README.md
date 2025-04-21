@@ -22,6 +22,17 @@ This extension contributes the following settings:
 
 ## Release Notes
 
+### 0.0.3
+
+* Adding `END` even though it doesn't work, since I'm making a compiler that will allow it
+* Allow arbitrary effects to be highlighted
+* Discovered some new syntax allowed in `ROW`:
+  * A note declaration can be separated from its octave with a space or underscore as well.
+  * Allows the `\n` command same as MML, but not the `/n` variant.
+  * One can unspecify the current note by using `-` or `_` in place of a note.
+  * Note octaves are optional
+* Changed `play / stop` to `play` which changes to `stop` after clicking and back once it's done.
+
 ### 0.0.2
 
 Fix highlighting bug on notes in MML

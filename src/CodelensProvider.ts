@@ -33,6 +33,24 @@ export class CodelensProvider implements vscode.CodeLensProvider {
         });
     }
 
+    public reload() {
+        this._onDidChangeCodeLenses.fire();
+    }
+
+    public play(name: string) {
+        if (name in this.codeLenses) {
+            this.codeLenses[name].details.playing = true;
+            this.reload();
+        }
+    }
+
+    public stop(name: string) {
+        if (name in this.codeLenses) {
+            this.codeLenses[name].details.playing = false;
+            this.reload();
+        }
+    }
+
     public provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.CodeLens[] | Thenable<vscode.CodeLens[]> {
         if (vscode.workspace.getConfiguration("pmmusic").get("enableCodeLens", true)) {
             let codeLenses = [];
@@ -46,16 +64,27 @@ export class CodelensProvider implements vscode.CodeLensProvider {
                 let range = document.getWordRangeAtPosition(position, new RegExp(this.regex));
                 if (range) {
                     let sectionName = "";
-                    switch (matches[1].substr(0, 3)) {
+                    switch (matches[1].substring(0, 3)) {
                         case "BGM": sectionName = "BGM"; break;
                         case "PAT": sectionName = "pattern"; break;
                         case "SFX": sectionName = "sound effect"; break;
                     }
-                    let name = matches[6];
-                    let lens = new CodeLens(range, {
-                        name: name,
-                        playing: false,
-                        type: sectionName
+                    let name = matches[6], details: LensInfo;
+                    if (name in this.codeLenses) {
+                        details = this.codeLenses[name].details;
+                    }
+                    else {
+                        details = {
+                            name: name,
+                            playing: false,
+                            type: sectionName
+                        };
+                    }
+                    let lens = new CodeLens(range, details, {
+                        title: details.playing ? "stop" : "play",
+                        tooltip: `${details.playing ? "Stop playing" : "Play"} this ${details.type} through pokemini_musicconv`,
+                        command: "pmmusic.togglePlayingSection",
+                        arguments: [details.name]
                     });
                     codeLenses.push(lens);
                     this.codeLenses[name] = lens;
@@ -64,19 +93,6 @@ export class CodelensProvider implements vscode.CodeLensProvider {
             return codeLenses;
         }
         return [];
-    }
-
-    public resolveCodeLens(codeLens: CodeLens, token: vscode.CancellationToken) {
-        if (vscode.workspace.getConfiguration("codelens-sample").get("enableCodeLens", true)) {
-            codeLens.command = {
-                title: "play / stop",
-                tooltip: `Play or stop playing this ${codeLens.details.type} through pokemini_musicconv`,
-                command: "pmmusic.togglePlayingSection",
-                arguments: [codeLens.details.name]
-            };
-            return codeLens;
-        }
-        return null;
     }
 }
 
