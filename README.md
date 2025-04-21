@@ -17,7 +17,7 @@ Once installed, either add that folder to your PATH or go to your VS Code settin
 
 This extension contributes the following settings:
 
-* `pmmusic.enableCodeLens`: enable/disable the `play / stop` button
+* `pmmusic.enableCodeLens`: enable/disable the `play` / `stop` button
 * `pmmusic.musicconvPath`: path (including filename and extension) of pokemini_musicconv
 
 ## Release Notes
