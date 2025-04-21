@@ -6,7 +6,7 @@
 	"publisher": "LogicPlace",
 	"version": "0.0.3",
 	"engines": {
-		"vscode": "^1.40.0"
+		"vscode": "^1.99.1"
 	},
 	"repository": {
 		"type": "git",
