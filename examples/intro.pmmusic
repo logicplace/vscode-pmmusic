@@ -43,5 +43,5 @@ ROW w3, v15, %$80, B-7
 ROW w3, v15, %$80, E-7
 ROW w3, v15, %$80, B-7
 ROW w6, v0
-; // END doesn't actually compile I guess ??
+END
 }

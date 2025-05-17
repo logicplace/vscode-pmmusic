@@ -63,8 +63,9 @@ export class CodelensProvider implements vscode.CodeLensProvider {
                 let position = new vscode.Position(line.lineNumber, indexOf);
                 let range = document.getWordRangeAtPosition(position, new RegExp(this.regex));
                 if (range) {
+                    const section = matches[1].substring(0, 3);
                     let sectionName = "";
-                    switch (matches[1].substring(0, 3)) {
+                    switch (section) {
                         case "BGM": sectionName = "BGM"; break;
                         case "PAT": sectionName = "pattern"; break;
                         case "SFX": sectionName = "sound effect"; break;
@@ -84,7 +85,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
                         title: details.playing ? "stop" : "play",
                         tooltip: `${details.playing ? "Stop playing" : "Play"} this ${details.type} through pokemini_musicconv`,
                         command: "pmmusic.togglePlayingSection",
-                        arguments: [details.name]
+                        arguments: [section, details.name]
                     });
                     codeLenses.push(lens);
                     this.codeLenses[name] = lens;

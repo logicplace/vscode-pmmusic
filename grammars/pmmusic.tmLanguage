@@ -62,7 +62,36 @@
         <array>
           <dict>
             <key>match</key>
-            <string>(INCLUDE|TITLE|COMPOSER|PROGRAMMER|DESCRIPTION|VARHEADER|OUTHEADER|OUTFILE)(?:[ \t](.*))?</string>
+            <string>(DESCRIPTION) (\{)</string>
+            <key>captures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.control.directive.$1.pmmusic</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.section.block.begin.bracket.curly.pmmusic</string>
+              </dict>
+            </dict>
+            <key>name</key>
+            <string>meta.directive.$1.pmmusic</string>
+            <key>end</key>
+            <string>(\})</string>
+            <key>endCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.section.block.end.bracket.curly.pmmusic</string>
+              </dict>
+            </dict>
+          </dict>
+          <dict>
+            <key>match</key>
+            <string>(INCLUDE|TITLE|COMPOSER|PROGRAMMER|DESCRIPTION|VARHEADER|OUTHEADER|OUTFILE)(?:[ \t]([^/\n\r]+|/[^/*])*)?</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -124,7 +153,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(M(?:ASTER)?BPM)(?:[ \t](?:(\d+)|((?:0x|\$)[\da-fA-F]+))(?:,[ \t](?:(\d+)|((?:0x|\$)[\da-fA-F]+)))?)?</string>
+            <string>(M(?:ASTER)?BPM)(?:[ \t](?:(\d+)(.\d+)?|((?:0x|\$)[\da-fA-F]+))(?:,[ \t](?:(\d+)|((?:0x|\$)[\da-fA-F]+)))?)?</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -158,7 +187,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(VOLLVL|VOLLEVEL)(?:[ \t](mml|system))?</string>
+            <string>(VOLLVL|VOLLEVEL)(?:[ \t](mml|system|16|4))?</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -177,7 +206,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(OCT(?:AVE)?REV)(?:[ \t](no|yes))?</string>
+            <string>(OCT(?:AVE)?REV)(?:[ \t](no|yes|false|true|0|1))?</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -196,7 +225,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(SHORTQ(?:UANTIZE)?)(?:[ \t](no|yes))?</string>
+            <string>(SHORTQ(?:UANTIZE)?)(?:[ \t](no|yes|false|true|0|1))?</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -217,7 +246,7 @@
             <key>name</key>
             <string>meta.block.bgm.pmmusic</string>
             <key>begin</key>
-            <string>(BGM)[ \t]([^{ ]*)[ \t](\{)</string>
+            <string>(BGM)[ \t]([^{ \t]*)[ \t](\{)</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
@@ -268,9 +297,49 @@
           </dict>
           <dict>
             <key>name</key>
+            <string>meta.block.bgm.pmmusic</string>
+            <key>begin</key>
+            <string>(BGM)[ \t]([^{ \t]*)[ \t]</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.control.directive.bgm.pmmusic</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>entity.name.section.pmmusic</string>
+              </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#comment</string>
+              </dict>
+              <dict>
+                <key>match</key>
+                <string>\|</string>
+                <key>name</key>
+                <string>punctuation.mark.loop.pmmusic</string>
+              </dict>
+              <dict>
+                <key>match</key>
+                <string>[^\s{}|]+</string>
+                <key>name</key>
+                <string>entity.name.section.pmmusic</string>
+              </dict>
+            </array>
+            <key>end</key>
+            <string>$</string>
+          </dict>
+          <dict>
+            <key>name</key>
             <string>meta.block.track.pattern.pmmusic</string>
             <key>begin</key>
-            <string>(PAT(?:TERN)?_T(?:RACK)?)[ \t]([^{ ]*)[ \t](\{)</string>
+            <string>(PAT(?:TERN)?_T(?:RACK)?)[ \t]([^{ \t]*)[ \t](\{)</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
@@ -309,9 +378,37 @@
           </dict>
           <dict>
             <key>name</key>
+            <string>meta.block.track.pattern.pmmusic</string>
+            <key>begin</key>
+            <string>(PAT(?:TERN)?_T(?:RACK)?)[ \t]([^{ \t]*)[ \t]</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.control.directive.track.pattern.pmmusic</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>entity.name.section.pmmusic</string>
+              </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#track-data</string>
+              </dict>
+            </array>
+            <key>end</key>
+            <string>$</string>
+          </dict>
+          <dict>
+            <key>name</key>
             <string>meta.block.track.sfx.pmmusic</string>
             <key>begin</key>
-            <string>(SFX_T(?:RACK)?)[ \t]([^{ ]*)[ \t](\{)</string>
+            <string>(SFX_T(?:RACK)?)[ \t]([^{ \t]*)[ \t](\{)</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
@@ -350,9 +447,37 @@
           </dict>
           <dict>
             <key>name</key>
+            <string>meta.block.track.sfx.pmmusic</string>
+            <key>begin</key>
+            <string>(SFX_T(?:RACK)?)[ \t]([^{ \t]*)[ \t]</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.control.directive.track.sfx.pmmusic</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>entity.name.section.pmmusic</string>
+              </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#track-data</string>
+              </dict>
+            </array>
+            <key>end</key>
+            <string>$</string>
+          </dict>
+          <dict>
+            <key>name</key>
             <string>meta.block.track.macro.pmmusic</string>
             <key>begin</key>
-            <string>(MACRO_T(?:RACK)?)[ \t]([^{ ]*)[ \t](\{)</string>
+            <string>(MACRO_T(?:RACK)?)[ \t]([^{ \t]*)[ \t](\{)</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
@@ -391,9 +516,37 @@
           </dict>
           <dict>
             <key>name</key>
+            <string>meta.block.track.macro.pmmusic</string>
+            <key>begin</key>
+            <string>(MACRO_T(?:RACK)?)[ \t]([^{ \t]*)[ \t]</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.control.directive.track.macro.pmmusic</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.pmmusic</string>
+              </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#track-data</string>
+              </dict>
+            </array>
+            <key>end</key>
+            <string>$</string>
+          </dict>
+          <dict>
+            <key>name</key>
             <string>meta.block.pattern.pmmusic</string>
             <key>begin</key>
-            <string>(PAT(?:TERN)?)[ \t]([^{ ]*)[ \t](\{)</string>
+            <string>(PAT(?:TERN)?)[ \t]([^{ \t]*)[ \t](\{)</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
@@ -432,9 +585,37 @@
           </dict>
           <dict>
             <key>name</key>
+            <string>meta.block.pattern.pmmusic</string>
+            <key>begin</key>
+            <string>(PAT(?:TERN)?)[ \t]([^{ \t]*)[ \t]</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.control.directive.pattern.pmmusic</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>entity.name.section.pmmusic</string>
+              </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#mml-data</string>
+              </dict>
+            </array>
+            <key>end</key>
+            <string>$</string>
+          </dict>
+          <dict>
+            <key>name</key>
             <string>meta.block.sfx.pmmusic</string>
             <key>begin</key>
-            <string>(SFX)[ \t]([^{ ]*)[ \t](\{)</string>
+            <string>(SFX)[ \t]([^{ \t]*)[ \t](\{)</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
@@ -473,9 +654,37 @@
           </dict>
           <dict>
             <key>name</key>
+            <string>meta.block.sfx.pmmusic</string>
+            <key>begin</key>
+            <string>(SFX)[ \t]([^{ \t]*)[ \t]</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.control.directive.sfx.pmmusic</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>entity.name.section.pmmusic</string>
+              </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#mml-data</string>
+              </dict>
+            </array>
+            <key>end</key>
+            <string>$</string>
+          </dict>
+          <dict>
+            <key>name</key>
             <string>meta.block.macro.pmmusic</string>
             <key>begin</key>
-            <string>(MACRO)[ \t]([^{ ]*)[ \t](\{)</string>
+            <string>(MACRO)[ \t]([^{ \t]*)[ \t](\{)</string>
             <key>beginCaptures</key>
             <dict>
               <key>1</key>
@@ -511,6 +720,34 @@
                 <string>punctuation.section.block.end.bracket.curly.pmmusic</string>
               </dict>
             </dict>
+          </dict>
+          <dict>
+            <key>name</key>
+            <string>meta.block.macro.pmmusic</string>
+            <key>begin</key>
+            <string>(MACRO)[ \t]([^{ \t]*)[ \t]</string>
+            <key>beginCaptures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>keyword.control.directive.macro.pmmusic</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>variable.other.pmmusic</string>
+              </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+              <dict>
+                <key>include</key>
+                <string>#mml-data</string>
+              </dict>
+            </array>
+            <key>end</key>
+            <string>$</string>
           </dict>
         </array>
       </dict>
@@ -575,7 +812,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(END|;)</string>
+            <string>(END)</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -656,7 +893,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>([a-g][-+#]?|r)(\d*(?:\.\.?)?)?</string>
+            <string>([a-g][-+#]?|r)(\d*(?:\.{1,4})?)?</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -757,7 +994,7 @@
         <array>
           <dict>
             <key>match</key>
-            <string>([%\\vwqs]|x[tpsr])(?:(\d+)|((?:0x|\$)[\da-fA-F]+))</string>
+            <string>([%\\vwqs]|x[tpsr])(?:(-?\d+)|(-?(?:0x|\$)[\da-fA-F]+))</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -795,7 +1032,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(!|xa)(?:(\d+)|((?:0x|\$)[\da-fA-F]+)):(?:(\d+)|((?:0x|\$)[\da-fA-F]+))</string>
+            <string>(!|xa)(?:(-?\d+)|(-?(?:0x|\$)[\da-fA-F]+)):(?:(-?\d+)|(-?(?:0x|\$)[\da-fA-F]+))</string>
             <key>captures</key>
             <dict>
               <key>1</key>
@@ -829,7 +1066,7 @@
           </dict>
           <dict>
             <key>match</key>
-            <string>(x[a-z])(?:(\d+)|((?:0x|\$)[\da-fA-F]+):)*(?:(\d+)|((?:0x|\$)[\da-fA-F]+))</string>
+            <string>(x[a-z])(?:(-?\d+)|(-?(?:0x|\$)[\da-fA-F]+):)*(?:(-?\d+)|(-?(?:0x|\$)[\da-fA-F]+))</string>
             <key>captures</key>
             <dict>
               <key>1</key>

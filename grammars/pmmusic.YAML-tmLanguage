@@ -18,7 +18,15 @@ repository:
         end: '\*/'
   directives:
     patterns:
-      - match: '(INCLUDE|TITLE|COMPOSER|PROGRAMMER|DESCRIPTION|VARHEADER|OUTHEADER|OUTFILE)(?:[ \t](.*))?'
+      - match: '(DESCRIPTION) (\{)'
+        captures:
+          '1': {name: keyword.control.directive.$1.pmmusic}
+          '2': {name: punctuation.section.block.begin.bracket.curly.pmmusic}
+        name: meta.directive.$1.pmmusic
+        end: '(\})'
+        endCaptures:
+          '1': {name: punctuation.section.block.end.bracket.curly.pmmusic}
+      - match: '(INCLUDE|TITLE|COMPOSER|PROGRAMMER|DESCRIPTION|VARHEADER|OUTHEADER|OUTFILE)(?:[ \t]([^/\n\r]+|/[^/*])*)?'
         captures:
           '1': {name: keyword.control.directive.$1.pmmusic}
           '2': {name: string.unquoted.pmmusic}
@@ -34,7 +42,7 @@ repository:
           '2': {name: constant.numeric.integer.decimal.pmmusic}
           '3': {name: constant.numeric.integer.hexadecimal.pmmusic}
         name: meta.directive.MASTERTIME.pmmusic
-      - match: '(M(?:ASTER)?BPM)(?:[ \t](?:(\d+)|((?:0x|\$)[\da-fA-F]+))(?:,[ \t](?:(\d+)|((?:0x|\$)[\da-fA-F]+)))?)?'
+      - match: '(M(?:ASTER)?BPM)(?:[ \t](?:(\d+)(.\d+)?|((?:0x|\$)[\da-fA-F]+))(?:,[ \t](?:(\d+)|((?:0x|\$)[\da-fA-F]+)))?)?'
         captures:
           '1': {name: keyword.control.directive.MASTERBPM.pmmusic}
           '2': {name: constant.numeric.integer.decimal.pmmusic}
@@ -42,23 +50,23 @@ repository:
           '4': {name: constant.numeric.integer.decimal.pmmusic}
           '5': {name: constant.numeric.integer.hexadecimal.pmmusic}
         name: meta.directive.MASTERBPM.pmmusic
-      - match: '(VOLLVL|VOLLEVEL)(?:[ \t](mml|system))?'
+      - match: '(VOLLVL|VOLLEVEL)(?:[ \t](mml|system|16|4))?'
         captures:
           '1': {name: keyword.control.directive.VOLLEVEL.pmmusic}
           '2': {name: constant.language.pmmusic}
         name: meta.directive.VOLLEVEL.pmmusic
-      - match: '(OCT(?:AVE)?REV)(?:[ \t](no|yes))?'
+      - match: '(OCT(?:AVE)?REV)(?:[ \t](no|yes|false|true|0|1))?'
         captures:
           '1': {name: keyword.control.directive.OCTAVEREV.pmmusic}
           '2': {name: constant.language.pmmusic}
         name: meta.directive.OCTAVEREV.pmmusic
-      - match: '(SHORTQ(?:UANTIZE)?)(?:[ \t](no|yes))?'
+      - match: '(SHORTQ(?:UANTIZE)?)(?:[ \t](no|yes|false|true|0|1))?'
         captures:
           '1': {name: keyword.control.directive.SHORTQUANTIZE.pmmusic}
           '2': {name: constant.language.pmmusic}
         name: meta.directive.SHORTQUANTIZE.pmmusic
       - name: meta.block.bgm.pmmusic
-        begin: '(BGM)[ \t]([^{ ]*)[ \t](\{)'
+        begin: '(BGM)[ \t]([^{ \t]*)[ \t](\{)'
         beginCaptures:
           '1': {name: keyword.control.directive.bgm.pmmusic}
           '2': {name: entity.name.section.pmmusic}
@@ -70,8 +78,18 @@ repository:
         end: '(\})'
         endCaptures:
           '1': {name: punctuation.section.block.end.bracket.curly.pmmusic}
+      - name: meta.block.bgm.pmmusic
+        begin: '(BGM)[ \t]([^{ \t]*)[ \t]'
+        beginCaptures:
+          '1': {name: keyword.control.directive.bgm.pmmusic}
+          '2': {name: entity.name.section.pmmusic}
+        patterns:
+          - {include: '#comment'}
+          - {match: \|, name: punctuation.mark.loop.pmmusic}
+          - {match: '[^\s{}|]+', name: entity.name.section.pmmusic}
+        end: $
       - name: meta.block.track.pattern.pmmusic
-        begin: '(PAT(?:TERN)?_T(?:RACK)?)[ \t]([^{ ]*)[ \t](\{)'
+        begin: '(PAT(?:TERN)?_T(?:RACK)?)[ \t]([^{ \t]*)[ \t](\{)'
         beginCaptures:
           '1': {name: keyword.control.directive.track.pattern.pmmusic}
           '2': {name: entity.name.section.pmmusic}
@@ -81,8 +99,16 @@ repository:
         end: '(\})'
         endCaptures:
           '1': {name: punctuation.section.block.end.bracket.curly.pmmusic}
+      - name: meta.block.track.pattern.pmmusic
+        begin: '(PAT(?:TERN)?_T(?:RACK)?)[ \t]([^{ \t]*)[ \t]'
+        beginCaptures:
+          '1': {name: keyword.control.directive.track.pattern.pmmusic}
+          '2': {name: entity.name.section.pmmusic}
+        patterns:
+          - {include: '#track-data'}
+        end: $
       - name: meta.block.track.sfx.pmmusic
-        begin: '(SFX_T(?:RACK)?)[ \t]([^{ ]*)[ \t](\{)'
+        begin: '(SFX_T(?:RACK)?)[ \t]([^{ \t]*)[ \t](\{)'
         beginCaptures:
           '1': {name: keyword.control.directive.track.sfx.pmmusic}
           '2': {name: entity.name.section.pmmusic}
@@ -92,8 +118,16 @@ repository:
         end: '(\})'
         endCaptures:
           '1': {name: punctuation.section.block.end.bracket.curly.pmmusic}
+      - name: meta.block.track.sfx.pmmusic
+        begin: '(SFX_T(?:RACK)?)[ \t]([^{ \t]*)[ \t]'
+        beginCaptures:
+          '1': {name: keyword.control.directive.track.sfx.pmmusic}
+          '2': {name: entity.name.section.pmmusic}
+        patterns:
+          - {include: '#track-data'}
+        end: $
       - name: meta.block.track.macro.pmmusic
-        begin: '(MACRO_T(?:RACK)?)[ \t]([^{ ]*)[ \t](\{)'
+        begin: '(MACRO_T(?:RACK)?)[ \t]([^{ \t]*)[ \t](\{)'
         beginCaptures:
           '1': {name: keyword.control.directive.track.macro.pmmusic}
           '2': {name: variable.other.pmmusic}
@@ -103,8 +137,16 @@ repository:
         end: '(\})'
         endCaptures:
           '1': {name: punctuation.section.block.end.bracket.curly.pmmusic}
+      - name: meta.block.track.macro.pmmusic
+        begin: '(MACRO_T(?:RACK)?)[ \t]([^{ \t]*)[ \t]'
+        beginCaptures:
+          '1': {name: keyword.control.directive.track.macro.pmmusic}
+          '2': {name: variable.other.pmmusic}
+        patterns:
+          - {include: '#track-data'}
+        end: $
       - name: meta.block.pattern.pmmusic
-        begin: '(PAT(?:TERN)?)[ \t]([^{ ]*)[ \t](\{)'
+        begin: '(PAT(?:TERN)?)[ \t]([^{ \t]*)[ \t](\{)'
         beginCaptures:
           '1': {name: keyword.control.directive.pattern.pmmusic}
           '2': {name: entity.name.section.pmmusic}
@@ -114,8 +156,16 @@ repository:
         end: '(\})'
         endCaptures:
           '1': {name: punctuation.section.block.end.bracket.curly.pmmusic}
+      - name: meta.block.pattern.pmmusic
+        begin: '(PAT(?:TERN)?)[ \t]([^{ \t]*)[ \t]'
+        beginCaptures:
+          '1': {name: keyword.control.directive.pattern.pmmusic}
+          '2': {name: entity.name.section.pmmusic}
+        patterns:
+          - {include: '#mml-data'}
+        end: $
       - name: meta.block.sfx.pmmusic
-        begin: '(SFX)[ \t]([^{ ]*)[ \t](\{)'
+        begin: '(SFX)[ \t]([^{ \t]*)[ \t](\{)'
         beginCaptures:
           '1': {name: keyword.control.directive.sfx.pmmusic}
           '2': {name: entity.name.section.pmmusic}
@@ -125,8 +175,16 @@ repository:
         end: '(\})'
         endCaptures:
           '1': {name: punctuation.section.block.end.bracket.curly.pmmusic}
+      - name: meta.block.sfx.pmmusic
+        begin: '(SFX)[ \t]([^{ \t]*)[ \t]'
+        beginCaptures:
+          '1': {name: keyword.control.directive.sfx.pmmusic}
+          '2': {name: entity.name.section.pmmusic}
+        patterns:
+          - {include: '#mml-data'}
+        end: $
       - name: meta.block.macro.pmmusic
-        begin: '(MACRO)[ \t]([^{ ]*)[ \t](\{)'
+        begin: '(MACRO)[ \t]([^{ \t]*)[ \t](\{)'
         beginCaptures:
           '1': {name: keyword.control.directive.macro.pmmusic}
           '2': {name: variable.other.pmmusic}
@@ -136,6 +194,14 @@ repository:
         end: '(\})'
         endCaptures:
           '1': {name: punctuation.section.block.end.bracket.curly.pmmusic}
+      - name: meta.block.macro.pmmusic
+        begin: '(MACRO)[ \t]([^{ \t]*)[ \t]'
+        beginCaptures:
+          '1': {name: keyword.control.directive.macro.pmmusic}
+          '2': {name: variable.other.pmmusic}
+        patterns:
+          - {include: '#mml-data'}
+        end: $
   track-data:
     patterns:
       - include: '#comment'
@@ -153,7 +219,7 @@ repository:
           - include: '#common-commands'
         end: $
         name: meta.directive.row.pmmusic
-      - match: (END|;)
+      - match: (END)
         captures:
           '1': {name: keyword.control.directive.track.end.pmmusic}
         name: meta.directive.end.pmmusic
@@ -175,7 +241,7 @@ repository:
   mml-data:
     patterns:
       - include: '#comment'
-      - match: '([a-g][-+#]?|r)(\d*(?:\.\.?)?)?'
+      - match: '([a-g][-+#]?|r)(\d*(?:\.{1,4})?)?'
         captures:
           '1': {name: variable.language.pmmusic}
           '2': {name: constant.numeric.integer.decimal.length.pmmusic}
@@ -203,7 +269,7 @@ repository:
         name: keyword.control.octave.step.pmmusic
   common-commands:
     patterns:
-      - match: '([%\\vwqs]|x[tpsr])(?:(\d+)|((?:0x|\$)[\da-fA-F]+))'
+      - match: '([%\\vwqs]|x[tpsr])(?:(-?\d+)|(-?(?:0x|\$)[\da-fA-F]+))'
         captures:
           '1': {name: entity.name.function.built-in.pmmusic}
           '2': {name: constant.numeric.integer.decimal.pmmusic}
@@ -213,7 +279,7 @@ repository:
         captures:
           '1': {name: entity.name.function.built-in.pmmusic}
         name: meta.mark.sound.modifier.pmmusic
-      - match: '(!|xa)(?:(\d+)|((?:0x|\$)[\da-fA-F]+)):(?:(\d+)|((?:0x|\$)[\da-fA-F]+))'
+      - match: '(!|xa)(?:(-?\d+)|(-?(?:0x|\$)[\da-fA-F]+)):(?:(-?\d+)|(-?(?:0x|\$)[\da-fA-F]+))'
         captures:
           '1': {name: entity.name.function.built-in.pmmusic}
           '2': {name: constant.numeric.integer.decimal.pmmusic}
@@ -221,7 +287,7 @@ repository:
           '4': {name: constant.numeric.integer.decimal.pmmusic}
           '5': {name: constant.numeric.integer.hexadecimal.pmmusic}
         name: meta.mark.sound.modifier.pmmusic
-      - match: '(x[a-z])(?:(\d+)|((?:0x|\$)[\da-fA-F]+):)*(?:(\d+)|((?:0x|\$)[\da-fA-F]+))'
+      - match: '(x[a-z])(?:(-?\d+)|(-?(?:0x|\$)[\da-fA-F]+):)*(?:(-?\d+)|(-?(?:0x|\$)[\da-fA-F]+))'
         captures:
           '1': {name: entity.name.function.built-in.pmmusic}
           '2': {name: constant.numeric.integer.decimal.pmmusic}

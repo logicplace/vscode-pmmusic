@@ -7,20 +7,34 @@ A companion for Pokemon mini music authorship! Write and play your MML right in 
 * pmmusic syntax highlighting
 * play your BGMs, patterns, and sound effects right from the editor
 
-## Requirements
-
-You'll need to download and install pokemini_musicconv, which is included in the [PokeMini](https://sourceforge.net/p/pokemini/) release.
-
-Once installed, either add that folder to your PATH or go to your VS Code settings (`Ctrl+,`) and set `pmmusic.musicconvPath` to the path for that exe.
-
 ## Extension Settings
 
 This extension contributes the following settings:
 
 * `pmmusic.enableCodeLens`: enable/disable the `play` / `stop` button
-* `pmmusic.musicconvPath`: path (including filename and extension) of pokemini_musicconv
+* `pmmusic.soundEngine`: select which sound engine to use for playback
+* `pmmusic.filter`: select which filter to apply to the sound
 
 ## Release Notes
+
+### 0.1.0
+
+* Sound emulation is now built-in
+  * Subsequently, `pmmusic.musicconvPath` has been removed
+  * Playback no longer automatically saves the file
+* Added `pmmusic.soundEngine` and `pmmusic.filter`
+* Added command for compiling to PMAS syntax
+* Syntax changes:
+  * First argument to MASTERBPM can be a float
+  * Length extension can go up to `....` not just `..`
+  * Effects can now highlight negative arguments
+  * VOLLEVEL can now accept 4/16
+  * OCTREV and SHORTQ can now accept true/false and 1/0
+  * Removed `;` from track-data as being END, turns out it's ignored entirely and there's no way to END in track-data in the official build
+  * body markers are only required for multiple lines
+  * allow body (containing raw text) for description
+    * not supported in the official build
+  * Support comments at the end of DESCRIPTION and similar directives
 
 ### 0.0.3
 
